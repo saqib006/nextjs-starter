@@ -16,7 +16,7 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(()=>{
 
-    mongoose.connect('mongodb://saqib:saqib123@ds133627.mlab.com:33627/assign')
+    mongoose.connect('connection uri')
     mongoose.connection.once('open',()=>{
     console.log('connection starting')
     }).on('error', (error)=>{
