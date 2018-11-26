@@ -1,6 +1,7 @@
 const express = require('express');
 const next = require('next');
 const userRoute = require('./routes/auth');
+const profileRoute = require('./routes/profile');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -16,7 +17,7 @@ const handle = app.getRequestHandler();
 
 app.prepare().then(()=>{
 
-    mongoose.connect('connection uri')
+    mongoose.connect('mongodb://saqib:saqib123@ds133627.mlab.com:33627/assign')
     mongoose.connection.once('open',()=>{
     console.log('connection starting')
     }).on('error', (error)=>{
@@ -32,8 +33,8 @@ app.prepare().then(()=>{
             return uuid();
         },
         secret:"hello next",
-        saveUninitialized:false,
-        resave:false
+        saveUninitialized:true,
+        resave:true
         
     }))
     server.use(passport.initialize())
@@ -41,11 +42,21 @@ app.prepare().then(()=>{
 
     server.use(cors())
     server.use('/auth', userRoute)
-    
+    server.use('/', profileRoute)
 
-    server.get('/contact', (req, res) => {
-        return app.render(req, res, 'contact', req.query)
-      })
+    function isAuthenticate(req, res, next){
+        if(req.isAuthenticated()){
+            return next();
+        } else {
+            res.redirect('/');
+        }
+    }
+
+  /*  server.get('/profile', isAuthenticate, (req, res) => {
+        console.log('hello', req.user)
+        app.render(req, res, '/profile', req.query)
+    })*/
+    
 
     server.get('*', (req, res) => {
         return handle(req, res)

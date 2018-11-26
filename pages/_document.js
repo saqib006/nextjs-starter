@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Document, {Head, Main, NextScript} from 'next/document';
+import Link from 'next/link';
 export default class MyDocument extends Document {
   render() {
     return (
@@ -16,9 +17,11 @@ export default class MyDocument extends Document {
             <div className="nav-wrapper">
             <a href="/" className="brand-logo">NextsJs Awesome</a>
             <ul id="nav-mobile" className="right hide-on-med-and-down">
+                <li><a href="/about">About</a></li>
+                <li><Link href="/profile"><a >Profile</a></Link></li>
                 <li><a href="/login">Log In</a></li>
                 <li><a href="/register">Sign Up</a></li>
-                <li><a href="/about">About</a></li>
+               
             </ul>
             </div>
         </nav>
