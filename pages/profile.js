@@ -1,6 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
-export default class profile extends Component {
+class profile extends Component {
+  constructor(props){
+    super(props)
+
+    console.log('profile', props)
+  }
+
+
+  static async getInitialProps({ isServer, store }) {
+    console.log('its',isServer, store)
+    return isServer
+  }
+
+
   render() {
     return (
       <div>
@@ -9,3 +23,13 @@ export default class profile extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return{
+    user:state.authReducer.user
+  }
+}
+
+
+
+export default connect(mapStateToProps, null)(profile)

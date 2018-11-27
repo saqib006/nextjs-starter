@@ -13,28 +13,28 @@ export default class authAction{
 
     static addUser(payload){
         return{
-            type:userAction.ADD_USER_PRO,
+            type:authAction.ADD_USER_PRO,
             payload:payload
         }
     }
 
     static getUser(payload){
         return{
-            type:userAction.GET_USER_PRO,
+            type:authAction.GET_USER_PRO,
             payload:payload
         }
     }
 
     static checkUser(token){
         return{
-            type:userAction.CHECK_USER_PRO,
+            type:authAction.CHECK_USER_PRO,
             payload:token
         }
     }
 
     static signout(){
         return{
-            type:userAction.SIGNOUT_PRO
+            type:authAction.SIGNOUT_PRO
         }
     }
 }

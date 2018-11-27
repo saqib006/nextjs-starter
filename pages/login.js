@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import axios from 'axios';
-export default class login extends Component {
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import authAction from '../store/action/authAction';
+import Router from 'next/router';
+class login extends Component {
 
     constructor(props){
         super(props)
@@ -10,22 +12,32 @@ export default class login extends Component {
         }
     }
 
+  
+
     changeHandler = (eve) => {
         this.setState({
             [eve.target.name]:eve.target.value
         })
     }
 
+    
+
     loginHandler = () => {
       const {email, pass} = this.state
-      let userInfo = {
+      if(email !== '' && pass !== ''){
+        let userInfo = {
           email:email,
           password:pass
       }
-      axios.post('http://localhost:3000/auth/login', userInfo).then((res)=>{
-          console.log('axios', res)
-      })
-      
+      this.props.login(userInfo)
+
+  
+        this.setState({
+          email:'',
+          pass:''
+        })
+      }
+     
     }
 
   render() {
@@ -36,12 +48,12 @@ export default class login extends Component {
         <div className="row">
 
         <div className="input-field">
-          <input id="email" onChange={this.changeHandler} name="email" type="email" className="validate"/>
+          <input id="email" onChange={this.changeHandler} value={this.state.email} name="email" type="email" className="validate"/>
           <label htmlFor="email">Email</label>
         </div>
 
         <div className="input-field">
-          <input id="password" onChange={this.changeHandler} name="pass" type="password" className="validate"/>
+          <input id="password" onChange={this.changeHandler} value={this.state.pass} name="pass" type="password" className="validate"/>
           <label htmlFor="password">Password</label>
         </div>
 
@@ -54,3 +66,17 @@ export default class login extends Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return{
+    user:state.authReducer.user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      login : payload => {return dispatch(authAction.getUser(payload))}
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(login)

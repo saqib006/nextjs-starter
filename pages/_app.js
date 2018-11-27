@@ -18,7 +18,7 @@ class MyApp extends Component {
     return (
      <Container>
          <Provider store={store}>
-            <Component {...props}/>
+            <Component {...pageProps}/>
          </Provider>
      </Container>
     )

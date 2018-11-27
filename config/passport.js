@@ -9,7 +9,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
 	User.getUserById(id, function (err, user) {
-		done(err, user);
+		done(err, user.id);
 	});
 });
 
@@ -30,7 +30,13 @@ function (email, password, done) {
         User.comparePassword(password, user.password, function (err, isMatch) {
             if (err) throw err;
             if (isMatch) {
-                return done(null, user);
+              
+                return done(null, {
+                    id:user._id,
+                    name:user.name,
+                    email:user.email
+                   
+                });
             } else {
                 return done(null, false, { message: 'Invalid password' });
             }

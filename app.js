@@ -1,7 +1,6 @@
 const express = require('express');
 const next = require('next');
 const userRoute = require('./routes/auth');
-const profileRoute = require('./routes/profile');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -42,7 +41,7 @@ app.prepare().then(()=>{
 
     server.use(cors())
     server.use('/auth', userRoute)
-    server.use('/', profileRoute)
+    //server.use('/', isAuthenticate, profileRoute(app))
 
     function isAuthenticate(req, res, next){
         if(req.isAuthenticated()){
@@ -52,11 +51,30 @@ app.prepare().then(()=>{
         }
     }
 
-  /*  server.get('/profile', isAuthenticate, (req, res) => {
-        console.log('hello', req.user)
-        app.render(req, res, '/profile', req.query)
-    })*/
+    server.get('/profile', isAuthenticate, (req, res) => {
+        console.log('user',req.user)
+        app.render(req, res, '/profile')
+    })
+
+    server.get('/login', (req, res) => {
+        if(req.user){
+            res.redirect('/profile')
+        }
+        else{
+            app.render(req, res, '/login')
+        }
+        
+    })
     
+    server.get('/register', (req, res) => {
+        if(req.user){
+            res.redirect('/profile')
+        }
+        else{
+            app.render(req, res, '/register')
+        }
+        
+    })
 
     server.get('*', (req, res) => {
         return handle(req, res)

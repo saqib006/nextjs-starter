@@ -18,11 +18,14 @@ routes.post('/register', (req, res)=>{
 })
 
 
-
-
-//passport.authenticate('local', { failureRedirect: '/login' }),
 routes.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) =>{
-    res.json(req.body)
-  });
+    res.json(req.user)
+});
+
+
+routes.get('/logout', function (req, res) {
+	req.logout();
+	res.redirect('/login');
+});
 
 module.exports = routes;

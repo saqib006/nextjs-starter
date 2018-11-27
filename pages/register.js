@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import {connect} from 'react-redux';
+import authAction from '../store/action/authAction';
 
-export default class register extends Component {
+class register extends Component {
 
 
     constructor(props){
@@ -21,15 +22,25 @@ export default class register extends Component {
 
     registerHandler = () => {
         const {name, email, pass} = this.state
-        let userInfo = {
-            name:name,
-            email:email,
-            pass:pass
+        if(name !== '' && email !== '' && pass !== ''){
+            let userInfo = {
+                name:name,
+                email:email,
+                pass:pass
+            }
+
+            this.props.signup(userInfo)
+
+            this.setState({
+                name:'',
+                email:'',
+                pass:''
+            })
         }
-        axios.post('http://localhost:3000/auth/register', userInfo).then((res)=>{
-            console.log('axios', res)
-        })
+        
     }
+
+    
 
   render() {
     return (
@@ -40,17 +51,17 @@ export default class register extends Component {
         <div className="row">
 
         <div className="input-field">
-          <input id="name" type="text" onChange={this.changeHandler} name="name" className="validate"/>
+          <input id="name" type="text" value={this.state.name} onChange={this.changeHandler} name="name" className="validate"/>
           <label htmlFor="name">Your Name</label>
         </div>
 
         <div className="input-field">
-          <input id="email" type="email" onChange={this.changeHandler} name="email" className="validate"/>
+          <input id="email" type="email" value={this.state.email} onChange={this.changeHandler} name="email" className="validate"/>
           <label htmlFor="email">Email</label>
         </div>
 
         <div className="input-field">
-          <input id="password" type="password" onChange={this.changeHandler} name="pass" className="validate"/>
+          <input id="password" type="password" value={this.state.pass} onChange={this.changeHandler} name="pass" className="validate"/>
           <label htmlFor="password">Password</label>
         </div>
 
@@ -65,3 +76,17 @@ export default class register extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+    return{
+      user:state.authReducer.user
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+        signup : payload => {return dispatch(authAction.addUser(payload))}
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(register)
